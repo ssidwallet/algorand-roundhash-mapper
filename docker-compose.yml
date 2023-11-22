@@ -1,0 +1,22 @@
+version: '3'
+services:
+  worker:
+    build: .
+    ports:
+      - '3003:3000'
+    restart: unless-stopped
+    env_file: .env
+    links:
+      - mapper_db
+    depends_on:
+      - mapper_db
+  mapper_db:
+    image: postgres:9.6.1
+    environment:
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=mapperdb
+    volumes:
+      - ./db/data:/app/postgres/data
+    ports:
+      - 5432:5432
